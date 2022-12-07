@@ -8,7 +8,7 @@ class Piano {
     }
 
     draw() {
-        let graphics = this.scene.add.graphics({ lineStyle: { width: 1, color: 0x0 }, fillStyle: { color: 0xffffff } });
+        let graphics = this.scene.add.graphics({ lineStyle: { width: 2, color: 0x0 }, fillStyle: { color: 0xffffff } });
         for (let i = 0; i < 14; i++) {
             let rect = new Phaser.Geom.Rectangle(this.x + i * this.keyWidth, this.y, this.keyWidth, this.height);
             graphics.fillRectShape(rect);
