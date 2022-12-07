@@ -17,7 +17,7 @@ class GuessIntervalScene extends Phaser.Scene {
         let startButton = this.add.rectangle(800, 450, 600, 200, 0x00ee55)
             .setOrigin(0.5);
         let startButtonText = this.add.text(800, 450, 'Начать',
-            { fontFamily: 'sans-serif', fontSize: 60, color: '#000' })
+            { fontFamily: 'sans-serif', fontSize: 70, color: '#000' })
             .setOrigin(0.5);
 
         startButton.setInteractive();
@@ -118,7 +118,7 @@ class GuessIntervalScene extends Phaser.Scene {
         //     { fontFamily: 'sans-serif', fontSize: 50, color: '#000' })
         //     .setOrigin(0.5, 1);
 
-        let buttonNext = this.add.rectangle(800, 450, 600, 200, 0x00ee55)
+        let buttonNext = this.add.rectangle(800, 450, 700, 200, 0x00ee55)
             .setOrigin(0.5);
         let buttonNextText = this.add.text(800, 450, 'Следующий интервал',
             { fontFamily: 'sans-serif', fontSize: 60, color: '#000' })
