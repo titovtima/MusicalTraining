@@ -6,7 +6,7 @@ class GuessIntervalScene extends Phaser.Scene {
     }
 
     create() {
-        this.heading = this.add.text(800, 100, "Какой интервал звучит?",
+        this.heading = this.add.text(800, 100, "Угадайте интервал по звучанию",
             { fontFamily: 'sans-serif', fontSize: 80, color: '#000' }).setOrigin(0.5, 0);
 
         this.piano = new Piano(this, 100, 600, 300, 100);
@@ -14,11 +14,23 @@ class GuessIntervalScene extends Phaser.Scene {
 
         this.intervalsList = [[1, 1], [1, 2], [2, 3], [2, 4]];
 
-        this.guessRandomInterval();
+        let startButton = this.add.rectangle(800, 450, 600, 200, 0x00ee55)
+            .setOrigin(0.5);
+        let startButtonText = this.add.text(800, 450, 'Начать',
+            { fontFamily: 'sans-serif', fontSize: 60, color: '#000' })
+            .setOrigin(0.5);
+
+        startButton.setInteractive();
+        startButton.on('pointerup', () => {
+            startButton.destroy();
+            startButtonText.destroy();
+            this.guessRandomInterval();
+        });
     }
 
     guessRandomInterval() {
         this.sound.stopAll();
+        this.heading.setText('Какой интервал звучит?');
         let notesList = [[0,0], [0,1], [1, 1], [1, 2], [1, 3], [2, 3], [2, 4],
             [3, 5], [3, 6], [4, 6], [4, 7], [4, 8], [5, 8], [5, 9], [5, 10], [6, 10], [6, 11]];
         let lowNoteNumber = Math.floor(Math.random() * notesList.length);
@@ -53,7 +65,7 @@ class GuessIntervalScene extends Phaser.Scene {
     drawButtonsToGuess() {
         let buttonWidth = 1600 / 6;
         let buttonHeight = 100;
-        let x = buttonWidth / 2;
+        let x = buttonWidth * 3 / 2;
         let y = 200 + buttonHeight / 2;
         this.intervalsButtonsList = [];
         for (let interval of this.intervalsList) {
