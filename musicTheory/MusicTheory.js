@@ -34,14 +34,8 @@ var MusicTheory = function (_, Kotlin) {
   var Exception_init = Kotlin.kotlin.Exception_init_pdl1vj$;
   var Exception = Kotlin.kotlin.Exception;
   var mapOf = Kotlin.kotlin.collections.mapOf_qfcya0$;
-  var Random = Kotlin.kotlin.random.Random;
-  var random = Kotlin.kotlin.collections.random_iscd7z$;
-  var ArrayList_init_0 = Kotlin.kotlin.collections.ArrayList_init_287e2$;
-  var randomOrNull = Kotlin.kotlin.collections.randomOrNull_iscd7z$;
   var Enum = Kotlin.kotlin.Enum;
   var throwISE = Kotlin.throwISE;
-  var IntRange = Kotlin.kotlin.ranges.IntRange;
-  var random_0 = Kotlin.kotlin.ranges.random_xmiyix$;
   var joinToString = Kotlin.kotlin.collections.joinToString_fmv235$;
   var iterator = Kotlin.kotlin.text.iterator_gw00vp$;
   Either$Left.prototype = Object.create(Either.prototype);
@@ -580,28 +574,6 @@ var MusicTheory = function (_, Kotlin) {
   Interval$Companion.prototype.makeIntervalWithSwapNotesIfNeeded_byhmno$ = function (firstNote, secondNote) {
     return firstNote.natural > secondNote.natural ? new Interval(secondNote, firstNote) : new Interval(firstNote, secondNote);
   };
-  Interval$Companion.prototype.createRandomIntervalFromNote_o2rp1n$ = function (startNote) {
-    var pair = random(this.possibleIntervals.keys, Random.Default);
-    return Interval_init(startNote, pair.first, pair.second);
-  };
-  Interval$Companion.prototype.createRandomIntervalFromList_qoh887$ = function (startNote, intervalsList) {
-    var tmp$;
-    var destination = ArrayList_init_0();
-    var tmp$_0;
-    tmp$_0 = intervalsList.iterator();
-    while (tmp$_0.hasNext()) {
-      var element = tmp$_0.next();
-      if (this.possibleIntervals.containsKey_11rb$(element))
-        destination.add_11rb$(element);
-    }
-    var filteredList = destination;
-    tmp$ = randomOrNull(filteredList, Random.Default);
-    if (tmp$ == null) {
-      return null;
-    }
-    var pair = tmp$;
-    return Interval_init(startNote, pair.first, pair.second);
-  };
   Interval$Companion.$metadata$ = {
     kind: Kind_OBJECT,
     simpleName: 'Companion',
@@ -947,7 +919,6 @@ var MusicTheory = function (_, Kotlin) {
     return $this;
   }
   function NoteWithOctave(noteId, natural) {
-    NoteWithOctave$Companion_getInstance();
     Note.call(this, noteId, natural);
     this.noteId_p01qgm$_0 = noteId;
     this.natural_e61v78$_0 = natural;
@@ -968,32 +939,9 @@ var MusicTheory = function (_, Kotlin) {
       return this.natural_e61v78$_0;
     }
   });
-  function NoteWithOctave$Companion() {
-    NoteWithOctave$Companion_instance = this;
-  }
-  NoteWithOctave$Companion.prototype.createRandomNoteWithOctave = function () {
-    var tmp$, tmp$_0;
-    var natural = random_0(new IntRange(0, 6), Random.Default);
-    tmp$_0 = (tmp$ = Note$Companion_getInstance().naturalToId.get_11rb$(natural)) != null ? tmp$ + random_0(new IntRange(-2, 2), Random.Default) | 0 : null;
-    if (tmp$_0 == null) {
-      throw new NoteException(void 0, void 0, void 0, 'Implementation error');
-    }
-    var noteId = tmp$_0;
-    var octave = random_0(new IntRange(0, 3), Random.Default);
-    return NoteWithOctave_init(new Note(noteId, natural), octave);
+  NoteWithOctave.prototype.noteWithoutOctave = function () {
+    return Note_init(this);
   };
-  NoteWithOctave$Companion.$metadata$ = {
-    kind: Kind_OBJECT,
-    simpleName: 'Companion',
-    interfaces: []
-  };
-  var NoteWithOctave$Companion_instance = null;
-  function NoteWithOctave$Companion_getInstance() {
-    if (NoteWithOctave$Companion_instance === null) {
-      new NoteWithOctave$Companion();
-    }
-    return NoteWithOctave$Companion_instance;
-  }
   NoteWithOctave.$metadata$ = {
     kind: Kind_CLASS,
     simpleName: 'NoteWithOctave',
@@ -1153,21 +1101,14 @@ var MusicTheory = function (_, Kotlin) {
   function chordsTextToString_JS(chordsText) {
     return chordsText.toString();
   }
-  function createRandomNoteWithOctave_JS() {
-    return NoteWithOctave$Companion_getInstance().createRandomNoteWithOctave();
+  function getIntervalNameByDifferenceNumbers_JS(naturalsDiff, noteIdsDiff) {
+    return Interval$Companion_getInstance().possibleIntervals.get_11rb$(to(naturalsDiff, noteIdsDiff));
   }
-  function createRandomIntervalFromNote_JS(startNote) {
-    return Interval$Companion_getInstance().createRandomIntervalFromNote_o2rp1n$(startNote);
+  function createNoteWithOctave_JS(noteId, natural) {
+    return new NoteWithOctave(noteId, natural);
   }
-  function createRandomIntervalFromList_JS(startNote, intervalsList) {
-    var tmp$ = Interval$Companion_getInstance();
-    var destination = ArrayList_init(intervalsList.length);
-    var tmp$_0;
-    for (tmp$_0 = 0; tmp$_0 !== intervalsList.length; ++tmp$_0) {
-      var item = intervalsList[tmp$_0];
-      destination.add_11rb$(to(item[0], item[1]));
-    }
-    return tmp$.createRandomIntervalFromList_qoh887$(startNote, destination);
+  function createIntervalByNoteAndDiffs_JS(startNote, naturalsDiff, noteIdsDiff) {
+    return Interval_init(startNote, naturalsDiff, noteIdsDiff);
   }
   var package$titovtima = _.titovtima || (_.titovtima = {});
   var package$musicTheory = package$titovtima.musicTheory || (package$titovtima.musicTheory = {});
@@ -1223,9 +1164,6 @@ var MusicTheory = function (_, Kotlin) {
   package$musicTheory.Note_init_4o0j9x$ = Note_init;
   package$musicTheory.Note_init_2zf50e$ = Note_init_0;
   package$musicTheory.Note = Note;
-  Object.defineProperty(NoteWithOctave, 'Companion', {
-    get: NoteWithOctave$Companion_getInstance
-  });
   package$musicTheory.NoteWithOctave_init_t7qrq1$ = NoteWithOctave_init;
   package$musicTheory.NoteWithOctave = NoteWithOctave;
   Object.defineProperty(PlainTextAPI, 'Companion', {
@@ -1245,9 +1183,9 @@ var MusicTheory = function (_, Kotlin) {
   _.chordName = chordName_JS;
   _.keyName = keyName_JS;
   _.chordsTextToString = chordsTextToString_JS;
-  _.createRandomNoteWithOctave = createRandomNoteWithOctave_JS;
-  _.createRandomIntervalFromNote = createRandomIntervalFromNote_JS;
-  _.createRandomIntervalFromList = createRandomIntervalFromList_JS;
+  _.getIntervalNameByDifferenceNumbers = getIntervalNameByDifferenceNumbers_JS;
+  _.createNoteWithOctave = createNoteWithOctave_JS;
+  _.createIntervalByNoteAndDiffs = createIntervalByNoteAndDiffs_JS;
   defaultNotation = NotationSystem$English_getInstance();
   Kotlin.defineModule('MusicTheory', _);
   return _;
