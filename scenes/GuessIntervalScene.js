@@ -52,17 +52,18 @@ class GuessIntervalScene extends Phaser.Scene {
         }
         let lowNoteId = lowNote.noteId;
 
-        let lowNoteSound = this.sound.add('note_' + lowNoteId);
-        let highNoteSound = this.sound.add('note_' + highNoteId);
+        this.lowNoteSound = this.sound.add('note_' + lowNoteId);
+        this.highNoteSound = this.sound.add('note_' + highNoteId);
         // this.sound.play('note_' + highNoteId);
-        lowNoteSound.play();
-        highNoteSound.play();
+        this.lowNoteSound.play();
+        this.highNoteSound.play();
 
-        this.drawButtonsToGuess();
+        this.drawAnswerButtons();
+        this.drawRepeatButtons();
         // this.piano.pressKeys([lowNoteId, highNoteId]);
     }
 
-    drawButtonsToGuess() {
+    drawAnswerButtons() {
         let buttonWidth = 1600 / 6;
         let buttonHeight = 100;
         let x = buttonWidth * 3 / 2;
@@ -113,6 +114,10 @@ class GuessIntervalScene extends Phaser.Scene {
                 button.text.destroy();
             }
         }
+        for (let button of this.repeatButtons) {
+            button.rect.destroy();
+            button.text.destroy();
+        }
 
         // let intervalName = this.add.text(800, 580, interval.name_ru,
         //     { fontFamily: 'sans-serif', fontSize: 50, color: '#000' })
@@ -136,6 +141,42 @@ class GuessIntervalScene extends Phaser.Scene {
             this.piano.clear();
 
             this.guessRandomInterval();
+        })
+    }
+
+    drawRepeatButtons() {
+        let playTogetherRect = this.add.rectangle(1450, 360, 300, 80, 0x00ee55).
+            setOrigin(0.5);
+        let playTogetherText = this.add.text(1450, 360, "сыграть\nвместе",
+            { fontFamily: 'sans-serif', fontSize: 30, color: '#000', align: 'center' })
+            .setOrigin(0.5);
+
+        playTogetherRect.setInteractive();
+        playTogetherRect.on('pointerup', () => {
+            this.lowNoteSound.play();
+            this.highNoteSound.play();
+        });
+
+        this.repeatButtons = [{
+            'rect': playTogetherRect,
+            'text': playTogetherText
+        }];
+
+        let playByOneRect = this.add.rectangle(1450, 460, 300, 80, 0x00ee55).
+        setOrigin(0.5);
+        let playByOneText = this.add.text(1450, 460, "сыграть\nпо очереди",
+            { fontFamily: 'sans-serif', fontSize: 30, color: '#000', align: 'center' })
+            .setOrigin(0.5);
+
+        playByOneRect.setInteractive();
+        playByOneRect.on('pointerup', () => {
+            this.lowNoteSound.play();
+            setTimeout(() => { this.highNoteSound.play(); }, 500);
+        });
+
+        this.repeatButtons.push({
+            'rect': playByOneRect,
+            'text': playByOneText
         })
     }
 }
