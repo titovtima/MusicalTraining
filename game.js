@@ -20,4 +20,5 @@ const config = {
     ],
 };
 
+YaGames.init();
 let game = new Phaser.Game(config);
