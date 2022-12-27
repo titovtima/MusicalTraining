@@ -83,7 +83,8 @@ class GuessIntervalScene extends Phaser.Scene {
                 this.intervalChosen(button.intervalName);
             });
         }
-        this.drawRepeatButtons();
+        if (!this.repeatButtons)
+            this.drawRepeatButtons();
         // this.piano.pressKeys([lowNoteId, highNoteId]);
     }
 
@@ -133,10 +134,6 @@ class GuessIntervalScene extends Phaser.Scene {
                 button.rect.destroy();
                 button.text.destroy();
             }
-        }
-        for (let button of this.repeatButtons) {
-            button.rect.destroy();
-            button.text.destroy();
         }
 
         let buttonNext = this.add.rectangle(800, 550, 700, 150, 0x00ee55)
@@ -211,6 +208,15 @@ class GuessIntervalScene extends Phaser.Scene {
 
     changeIntervalsList() {
         this.piano.clear();
+        this.sound.stopAll();
+        this.heading.setText('Выберите интервалы');
+        if (this.repeatButtons) {
+            for (let button of this.repeatButtons) {
+                button.rect.destroy();
+                button.text.destroy();
+            }
+            this.repeatButtons = null;
+        }
         if (this.intervalsButtonsList)
             for (let button of this.intervalsButtonsList) {
                 button.rect.destroy();
@@ -250,8 +256,8 @@ class GuessIntervalScene extends Phaser.Scene {
                 if (!hasInterval) {
                     this.intervalsList.push(MusicTheory.getDifferenceNumbersByIntervalName(button.intervalName));
                     this.intervalsList.sort(function(a, b) {
-                        if (a[0] !== b[0]) return a[0] < b[0];
-                        else return a[1] < b[1];
+                        if (a[0] !== b[0]) return a[0] - b[0];
+                        else return a[1] - b[1];
                     });
                     rect.fillColor = 0x00ff44;
                 }
