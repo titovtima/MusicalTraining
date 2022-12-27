@@ -12,7 +12,7 @@ class GuessIntervalScene extends Phaser.Scene {
         this.piano = new Piano(this, 0, 650, 250, 80);
         this.piano.draw();
 
-        this.intervalsList = [[1, 1], [1, 2], [2, 3], [2, 4], [3, 5], [4, 7], [5, 8], [5, 9], [6, 10], [6, 11]];
+        this.intervalsList = [[1, 1], [1, 2], [2, 3], [2, 4]];
 
         this.drawStartButton();
         this.drawSettingsButton();
