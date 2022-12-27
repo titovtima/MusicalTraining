@@ -20,5 +20,13 @@ const config = {
     ],
 };
 
-YaGames.init();
+YaGames.init({
+    'screen': {
+        'orientation': {
+            'value': 'landscape',
+            'lock': true
+        }
+    }
+});
+
 let game = new Phaser.Game(config);
