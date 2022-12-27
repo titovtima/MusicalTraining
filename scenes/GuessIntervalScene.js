@@ -211,6 +211,7 @@ class GuessIntervalScene extends Phaser.Scene {
 
     changeIntervalsList() {
         this.piano.clear();
+        this.heading.setText('Выберите интервалы');
         if (this.intervalsButtonsList)
             for (let button of this.intervalsButtonsList) {
                 button.rect.destroy();
@@ -250,8 +251,8 @@ class GuessIntervalScene extends Phaser.Scene {
                 if (!hasInterval) {
                     this.intervalsList.push(MusicTheory.getDifferenceNumbersByIntervalName(button.intervalName));
                     this.intervalsList.sort(function(a, b) {
-                        if (a[0] !== b[0]) return a[0] < b[0];
-                        else return a[1] < b[1];
+                        if (a[0] !== b[0]) return a[0] - b[0];
+                        else return a[1] - b[1];
                     });
                     rect.fillColor = 0x00ff44;
                 }
