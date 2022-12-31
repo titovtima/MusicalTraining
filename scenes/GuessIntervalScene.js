@@ -14,8 +14,33 @@ class GuessIntervalScene extends Phaser.Scene {
 
         this.intervalsList = [[1, 1], [1, 2], [2, 3], [2, 4]];
 
+        this.getIntervalsListFromCookie();
         this.drawStartButton();
         this.drawSettingsButton();
+    }
+
+    findCookies() {
+        let cookies = {};
+        document.cookie.split('; ').forEach(value => {
+            let pair = value.split('=');
+            cookies[pair[0]] = pair[1];
+        });
+        return cookies;
+    }
+
+    getIntervalsListFromCookie() {
+        let cookie = this.findCookies().intervals_list;
+        if (cookie) {
+            this.intervalsList = [];
+            let cookieList = cookie.split(',');
+            for (let i = 0; i < cookieList.length; i += 2) {
+                this.intervalsList.push([Number(cookieList[i]), Number(cookieList[i+1])]);
+            }
+            this.intervalsList.sort(function(a, b) {
+                if (a[0] !== b[0]) return a[0] - b[0];
+                else return a[1] - b[1];
+            });
+        }
     }
 
     drawStartButton() {
@@ -274,6 +299,7 @@ class GuessIntervalScene extends Phaser.Scene {
         startButton.on('pointerup', () => {
             startButton.destroy();
             startButtonText.destroy();
+            document.cookie = `intervals_list=${this.intervalsList.flat().toString()}`;
             this.guessRandomInterval();
         })
     }
