@@ -166,6 +166,10 @@ class GuessIntervalScene extends Phaser.Scene {
         let buttonNextText = this.add.text(800, 550, 'Следующий интервал',
             { fontFamily: 'sans-serif', fontSize: 60, color: '#000' })
             .setOrigin(0.5);
+        this.buttonNext = {
+            'rect': buttonNext,
+            'text': buttonNextText
+        };
 
         buttonNext.setInteractive();
         buttonNext.on('pointerup', () => {
@@ -176,6 +180,7 @@ class GuessIntervalScene extends Phaser.Scene {
 
             buttonNextText.destroy();
             buttonNext.destroy();
+            this.buttonNext = null;
             this.piano.clear();
 
             this.guessRandomInterval();
@@ -235,6 +240,11 @@ class GuessIntervalScene extends Phaser.Scene {
         this.piano.clear();
         this.sound.stopAll();
         this.heading.setText('Выберите интервалы');
+        if (this.buttonNext) {
+            this.buttonNext.rect.destroy();
+            this.buttonNext.text.destroy();
+            this.buttonNext = null;
+        }
         if (this.repeatButtons) {
             for (let button of this.repeatButtons) {
                 button.rect.destroy();
