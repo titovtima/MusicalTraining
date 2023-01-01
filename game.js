@@ -20,6 +20,9 @@ const config = {
     ],
 };
 
+let player;
+let playerLoadingPromise;
+let yaGamesSDK;
 YaGames.init({
     'screen': {
         'orientation': {
@@ -27,6 +30,11 @@ YaGames.init({
             'lock': true
         }
     }
+}).then(ysdk => {
+    yaGamesSDK = ysdk;
+    playerLoadingPromise = ysdk.getPlayer({ scopes: false }).then(_player => {
+        player = _player
+    });
 });
 
 let game = new Phaser.Game(config);
