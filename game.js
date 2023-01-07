@@ -35,6 +35,5 @@ YaGames.init({
     playerLoadingPromise = ysdk.getPlayer({ scopes: false }).then(_player => {
         player = _player
     });
+    let game = new Phaser.Game(config);
 });
-
-let game = new Phaser.Game(config);
