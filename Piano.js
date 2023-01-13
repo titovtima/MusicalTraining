@@ -68,7 +68,7 @@ class Piano {
 
     unpressKey(id) {
         let keyRect = this.keyIdToRect(id);
-        this.graphics.lineStyle({ width: 1, color: 0x0 });
+        this.graphics.lineStyle(2, 0x0);
         this.graphics.fillStyle(0xffffff);
         if (this.isKeyBlack(id))
             this.graphics.fillStyle(0x0);
