@@ -8,18 +8,18 @@ class Piano {
     }
 
     draw() {
-        let graphics = this.scene.add.graphics({ lineStyle: { width: 2, color: 0x0 }, fillStyle: { color: 0xffffff } });
+        this.graphics = this.scene.add.graphics({ lineStyle: { width: 2, color: 0x0 }, fillStyle: { color: 0xffffff } });
         for (let i = 0; i < 14; i++) {
             let rect = new Phaser.Geom.Rectangle(this.x + i * this.keyWidth, this.y, this.keyWidth, this.height);
-            graphics.fillRectShape(rect);
-            graphics.strokeRectShape(rect);
+            this.graphics.fillRectShape(rect);
+            this.graphics.strokeRectShape(rect);
         }
-        graphics.fillStyle(0x0);
+        this.graphics.fillStyle(0x0);
         for (let i = 0; i < 14; i++) {
             if (i % 7 === 0 || i % 7 === 3) continue;
             let rect = new Phaser.Geom.Rectangle(this.x + i * this.keyWidth - this.keyWidth / 3, this.y,
                 this.keyWidth * 2 / 3, this.height * 4 / 7);
-            graphics.fillRectShape(rect);
+            this.graphics.fillRectShape(rect);
         }
     }
 
@@ -57,8 +57,8 @@ class Piano {
         let padding = this.keyWidth / 10 - 1;
         let drawRect = new Phaser.Geom.Rectangle(keyRect.x + padding, keyRect.y + padding,
             keyRect.width - padding * 2, keyRect.height - padding * 2);
-        let graphics = this.scene.add.graphics({ fillStyle: { color: 0xff0000 } });
-        graphics.fillRectShape(drawRect);
+        this.graphics.fillStyle(0xff0000);
+        this.graphics.fillRectShape(drawRect);
     }
 
     pressKeys(keys) {
@@ -68,10 +68,11 @@ class Piano {
 
     unpressKey(id) {
         let keyRect = this.keyIdToRect(id);
-        let graphics = this.scene.add.graphics({ lineStyle: { width: 1, color: 0x0 }, fillStyle: { color: 0xffffff } });
+        this.graphics.lineStyle({ width: 1, color: 0x0 });
+        this.graphics.fillStyle(0xffffff);
         if (this.isKeyBlack(id))
-            graphics.fillStyle(0x0);
-        graphics.fillRectShape(keyRect);
+            this.graphics.fillStyle(0x0);
+        this.graphics.fillRectShape(keyRect);
     }
 
     unpressKeys(keys) {
@@ -82,5 +83,9 @@ class Piano {
     clear() {
         for (let id = 0; id < 24; id++)
             this.unpressKey(id);
+    }
+
+    setVisibility(visibility) {
+        this.graphics.setVisible(visibility);
     }
 }

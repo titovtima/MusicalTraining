@@ -11,8 +11,9 @@ class GuessIntervalScene extends Phaser.Scene {
 
         this.piano = new Piano(this, 0, 650, 250, 80);
         this.piano.draw();
+        this.piano.setVisibility(false);
 
-        this.intervalsList = [[1, 1], [1, 2], [2, 3], [2, 4]];
+        this.intervalsList = [[2, 3], [2, 4]];
 
         this.getIntervalsListFromCookie();
         this.drawStartButton();
@@ -142,6 +143,7 @@ class GuessIntervalScene extends Phaser.Scene {
     }
 
     intervalChosen(intervalName) {
+        this.piano.setVisibility(true);
         this.piano.pressKeys([this.interval.lowNote.noteId, this.interval.highNote.noteId]);
         if (intervalName === this.interval.name_ru)
             this.heading.setText('Правильно!');
@@ -182,6 +184,7 @@ class GuessIntervalScene extends Phaser.Scene {
             buttonNext.destroy();
             this.buttonNext = null;
             this.piano.clear();
+            this.piano.setVisibility(false);
 
             this.guessRandomInterval();
         })
