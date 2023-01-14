@@ -1,9 +1,6 @@
-class StartScene extends Phaser.Scene {
-    create() {
-    }
-
-    update() {
-    }
+const GAME_SCENES_KEYS = {
+    Menu: 'MenuScene',
+    GuessInterval: 'GuessIntervalScene'
 }
 
 const config = {
@@ -16,6 +13,7 @@ const config = {
     },
     transparent: true,
     scene: [
+        MenuScene,
         GuessIntervalScene
     ],
 };

@@ -1,5 +1,9 @@
 class GuessIntervalScene extends Phaser.Scene {
 
+    constructor() {
+        super(GAME_SCENES_KEYS.GuessInterval);
+    }
+
     preload() {
         for (let i = 0; i < 24; i++)
             this.load.audio('note_' + i, 'sounds/' + i + '.mp3');
@@ -17,8 +21,8 @@ class GuessIntervalScene extends Phaser.Scene {
         this.isChoosingIntervals = false;
 
         this.getIntervalsListFromCookie();
-        this.drawStartButton();
         this.drawSetIntervalsListButton();
+        this.guessRandomInterval();
     }
 
     findCookies() {
@@ -38,32 +42,8 @@ class GuessIntervalScene extends Phaser.Scene {
             for (let i = 0; i < cookieList.length; i += 2) {
                 this.intervalsList.push([Number(cookieList[i]), Number(cookieList[i+1])]);
             }
-            this.intervalsList.sort(function(a, b) {
-                if (a[0] !== b[0]) return a[0] - b[0];
-                else return a[1] - b[1];
-            });
+            this.intervalsList.sort((a, b) => a[1] - b[1]);
         }
-    }
-
-    drawStartButton() {
-        let startButton = this.add.rectangle(800, 450, 600, 200, 0x00ee55)
-            .setOrigin(0.5);
-        let startButtonText = this.add.text(800, 450, 'Начать',
-            { fontFamily: 'sans-serif', fontSize: 70, color: '#000' })
-            .setOrigin(0.5);
-
-        this.startButton = {
-            'rect': startButton,
-            'text': startButtonText
-        };
-
-        startButton.setInteractive();
-        startButton.on('pointerup', () => {
-            this.startButton = undefined;
-            startButton.destroy();
-            startButtonText.destroy();
-            this.guessRandomInterval();
-        });
     }
 
     guessRandomInterval() {
@@ -92,6 +72,8 @@ class GuessIntervalScene extends Phaser.Scene {
                 highNoteId += 12
             }
         }
+        if (idsDiff === 6)
+            this.interval.name_ru = 'тритон';
         let lowNoteId = lowNote.noteId;
 
         this.lowNoteSound = this.sound.add('note_' + lowNoteId);
@@ -107,7 +89,7 @@ class GuessIntervalScene extends Phaser.Scene {
 
             rect.setInteractive();
             rect.on('pointerup', () => {
-                this.intervalChosen(button.intervalName);
+                this.intervalChosen(button.interval_name);
             });
         }
         if (!this.repeatButtons)
@@ -125,14 +107,15 @@ class GuessIntervalScene extends Phaser.Scene {
             let rect = this.add.rectangle(x, y, buttonWidth - 20, buttonHeight - 20, 0x00ffff)
                 .setOrigin(0.5);
 
-            let name = MusicTheory.getIntervalNameByDifferenceNumbers(interval[0], interval[1]);
+            let name = MusicTheory.getIntervalNameByNotesIdsDifference(interval[1]);
             let text = this.add.text(x, y, name, { fontFamily: 'sans-serif', fontSize: 50, color: '#000' })
                 .setOrigin(0.5);
 
             this.intervalsButtonsList.push({
                 'rect': rect,
                 'text': text,
-                'intervalName': name
+                'interval_name': name,
+                'interval_numbers': interval
             });
 
             x += buttonWidth;
@@ -317,19 +300,15 @@ class GuessIntervalScene extends Phaser.Scene {
                 button.rect.destroy();
                 button.text.destroy();
             }
-        if (this.startButton) {
-            this.startButton.rect.destroy();
-            this.startButton.text.destroy();
-        }
-        let allIntervals = [[1, 1], [1, 2], [2, 3], [2, 4], [3, 5], [4, 7], [5, 8], [5, 9], [6, 10], [6, 11]];
+        let allIntervals = [[1, 1], [1, 2], [2, 3], [2, 4], [3, 5], [3, 6],
+            [4, 7], [5, 8], [5, 9], [6, 10], [6, 11], [7, 12]];
         this.drawIntervalsButtons(allIntervals);
         for (let button of this.intervalsButtonsList) {
             button.rect.fillColor = 0xff5555;
         }
         for (let interval of this.intervalsList) {
-            let intervalName = MusicTheory.getIntervalNameByDifferenceNumbers(interval[0], interval[1]);
             for (let button of this.intervalsButtonsList) {
-                if (button.intervalName === intervalName) {
+                if (button.interval_numbers[1] === interval[1]) {
                     button.rect.fillColor = 0x00ff44;
                 }
             }
@@ -341,19 +320,15 @@ class GuessIntervalScene extends Phaser.Scene {
             rect.on('pointerup', () => {
                 let hasInterval = false;
                 for (let interval of this.intervalsList) {
-                    let name = MusicTheory.getIntervalNameByDifferenceNumbers(interval[0], interval[1]);
-                    if (name === button.intervalName) {
+                    if (interval[1] === button.interval_numbers[1]) {
                         hasInterval = true;
                         this.intervalsList = this.intervalsList.filter(value => value !== interval);
                         rect.fillColor = 0xff5555;
                     }
                 }
                 if (!hasInterval) {
-                    this.intervalsList.push(MusicTheory.getDifferenceNumbersByIntervalName(button.intervalName));
-                    this.intervalsList.sort(function(a, b) {
-                        if (a[0] !== b[0]) return a[0] - b[0];
-                        else return a[1] - b[1];
-                    });
+                    this.intervalsList.push(button.interval_numbers);
+                    this.intervalsList.sort((a, b) => a[1] - b[1]);
                     rect.fillColor = 0x00ff44;
                 }
             });
