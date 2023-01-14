@@ -78,7 +78,6 @@ class GuessIntervalScene extends Phaser.Scene {
 
         this.lowNoteSound = this.sound.add('note_' + lowNoteId);
         this.highNoteSound = this.sound.add('note_' + highNoteId);
-        // this.sound.play('note_' + highNoteId);
         this.lowNoteSound.play();
         this.highNoteSound.play();
 
@@ -94,7 +93,6 @@ class GuessIntervalScene extends Phaser.Scene {
         }
         if (!this.repeatButtons)
             this.drawRepeatButtons();
-        // this.piano.pressKeys([lowNoteId, highNoteId]);
     }
 
     drawIntervalsButtons(intervalsList = this.intervalsList) {
@@ -295,11 +293,22 @@ class GuessIntervalScene extends Phaser.Scene {
             }
             this.repeatButtons = null;
         }
-        if (this.intervalsButtonsList)
+        if (this.intervalsButtonsList) {
             for (let button of this.intervalsButtonsList) {
                 button.rect.destroy();
                 button.text.destroy();
             }
+        }
+        if (this.wrongAnswerButton) {
+            this.wrongAnswerButton.rect.destroy();
+            this.wrongAnswerButton.text.destroy();
+            this.wrongAnswerButton = null;
+        }
+        if (this.rightAnswerButton) {
+            this.rightAnswerButton.rect.destroy();
+            this.rightAnswerButton.text.destroy();
+            this.rightAnswerButton = null;
+        }
         let allIntervals = [[1, 1], [1, 2], [2, 3], [2, 4], [3, 5], [3, 6],
             [4, 7], [5, 8], [5, 9], [6, 10], [6, 11], [7, 12]];
         this.drawIntervalsButtons(allIntervals);
@@ -342,12 +351,14 @@ class GuessIntervalScene extends Phaser.Scene {
 
         startButton.setInteractive();
         startButton.on('pointerup', () => {
-            startButton.destroy();
-            startButtonText.destroy();
-            document.cookie = `intervals_list=${this.intervalsList.flat().toString()}`;
-            this.drawSetIntervalsListButton();
-            this.isChoosingIntervals = false;
-            this.guessRandomInterval();
-        })
+            if (this.intervalsList.length > 0) {
+                startButton.destroy();
+                startButtonText.destroy();
+                document.cookie = `intervals_list=${this.intervalsList.flat().toString()}`;
+                this.drawSetIntervalsListButton();
+                this.isChoosingIntervals = false;
+                this.guessRandomInterval();
+            }
+        });
     }
 }
