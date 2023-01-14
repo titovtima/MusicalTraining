@@ -9,15 +9,16 @@ class GuessIntervalScene extends Phaser.Scene {
         this.heading = this.add.text(800, 50, "Угадайте интервал по звучанию",
             { fontFamily: 'sans-serif', fontSize: 80, color: '#000' }).setOrigin(0.5, 0);
 
-        this.piano = new Piano(this, 0, 650, 250, 80);
+        this.piano = new Piano(this, 100, 500, 250, 100);
         this.piano.draw();
         this.piano.setVisibility(false);
 
         this.intervalsList = [[2, 3], [2, 4]];
+        this.isChoosingIntervals = false;
 
         this.getIntervalsListFromCookie();
         this.drawStartButton();
-        this.drawSettingsButton();
+        this.drawSetIntervalsListButton();
     }
 
     findCookies() {
@@ -115,8 +116,8 @@ class GuessIntervalScene extends Phaser.Scene {
     }
 
     drawIntervalsButtons(intervalsList = this.intervalsList) {
-        let buttonWidth = 1600 / 4;
-        let buttonHeight = 100;
+        let buttonWidth = 1600 / 3;
+        let buttonHeight = 150;
         let x = buttonWidth / 2;
         let y = 150 + buttonHeight / 2;
         this.intervalsButtonsList = [];
@@ -125,7 +126,7 @@ class GuessIntervalScene extends Phaser.Scene {
                 .setOrigin(0.5);
 
             let name = MusicTheory.getIntervalNameByDifferenceNumbers(interval[0], interval[1]);
-            let text = this.add.text(x, y, name, { fontFamily: 'sans-serif', fontSize: 35, color: '#000' })
+            let text = this.add.text(x, y, name, { fontFamily: 'sans-serif', fontSize: 50, color: '#000' })
                 .setOrigin(0.5);
 
             this.intervalsButtonsList.push({
@@ -145,27 +146,26 @@ class GuessIntervalScene extends Phaser.Scene {
     intervalChosen(intervalName) {
         this.piano.setVisibility(true);
         this.piano.pressKeys([this.interval.lowNote.noteId, this.interval.highNote.noteId]);
-        if (intervalName === this.interval.name_ru)
+        if (intervalName === this.interval.name_ru) {
             this.heading.setText('Правильно!');
-        else
+            this.drawOnlyRightAnswerButton(this.interval.name_ru);
+        } else {
             this.heading.setText('Неверно, попробуйте ещё раз!');
-        let leftButtons = [];
+            this.drawWrongAndRightAnswerButtons(intervalName, this.interval.name_ru);
+        }
         for (let button of this.intervalsButtonsList) {
-            if (button.text.text === this.interval.name_ru) {
-                button.rect.fillColor = 0x00ff44;
-                leftButtons.push(button);
-            } else if (button.text.text === intervalName) {
-                button.rect.fillColor = 0xff5555;
-                leftButtons.push(button);
-            } else {
-                button.rect.destroy();
-                button.text.destroy();
-            }
+            button.rect.destroy();
+            button.text.destroy();
         }
 
-        let buttonNext = this.add.rectangle(800, 550, 700, 150, 0x00ee55)
+        if (this.buttonNext) {
+            this.buttonNext.rect.destroy();
+            this.buttonNext.text.destroy();
+            this.buttonNext = null;
+        }
+        let buttonNext = this.add.rectangle(800, 400, 700, 150, 0x00ee55)
             .setOrigin(0.5);
-        let buttonNextText = this.add.text(800, 550, 'Следующий интервал',
+        let buttonNextText = this.add.text(800, 400, 'Следующий интервал',
             { fontFamily: 'sans-serif', fontSize: 60, color: '#000' })
             .setOrigin(0.5);
         this.buttonNext = {
@@ -175,10 +175,16 @@ class GuessIntervalScene extends Phaser.Scene {
 
         buttonNext.setInteractive();
         buttonNext.on('pointerup', () => {
-            leftButtons.forEach(button => {
-                button.rect.destroy();
-                button.text.destroy();
-            });
+            if (this.rightAnswerButton) {
+                this.rightAnswerButton.rect.destroy();
+                this.rightAnswerButton.text.destroy();
+                this.rightAnswerButton = null;
+            }
+            if (this.wrongAnswerButton) {
+                this.wrongAnswerButton.rect.destroy();
+                this.wrongAnswerButton.text.destroy();
+                this.wrongAnswerButton = null;
+            }
 
             buttonNextText.destroy();
             buttonNext.destroy();
@@ -187,14 +193,51 @@ class GuessIntervalScene extends Phaser.Scene {
             this.piano.setVisibility(false);
 
             this.guessRandomInterval();
-        })
+        });
+    }
+
+    drawOnlyRightAnswerButton(rightAnswerText) {
+        let rect = this.add.rectangle(800, 225, 533, 150, 0x00ff44)
+            .setOrigin(0.5);
+        let text = this.add.text(800, 225, rightAnswerText,
+            { fontFamily: 'sans-serif', fontSize: 50, color: '#000' })
+            .setOrigin(0.5);
+
+        this.rightAnswerButton = {
+            'rect': rect,
+            'text': text
+        };
+    }
+
+    drawWrongAndRightAnswerButtons(wrongAnswerText, rightAnswerText) {
+        let rect1 = this.add.rectangle(400, 225, 533, 150, 0xff5555)
+            .setOrigin(0.5);
+        let text1 = this.add.text(400, 225, wrongAnswerText,
+            { fontFamily: 'sans-serif', fontSize: 50, color: '#000' })
+            .setOrigin(0.5);
+
+        this.wrongAnswerButton = {
+            'rect': rect1,
+            'text': text1
+        };
+
+        let rect2 = this.add.rectangle(1200, 225, 533, 150, 0x00ff44)
+            .setOrigin(0.5);
+        let text2 = this.add.text(1200, 225, rightAnswerText,
+            { fontFamily: 'sans-serif', fontSize: 50, color: '#000' })
+            .setOrigin(0.5);
+
+        this.rightAnswerButton = {
+            'rect': rect2,
+            'text': text2
+        };
     }
 
     drawRepeatButtons() {
-        let playTogetherRect = this.add.rectangle(1500, 750, 200, 80, 0x00ee55).
+        let playTogetherRect = this.add.rectangle(1333, 820, 500, 120, 0x00ee55).
             setOrigin(0.5);
-        let playTogetherText = this.add.text(1500, 750, "сыграть\nвместе",
-            { fontFamily: 'sans-serif', fontSize: 30, color: '#000', align: 'center' })
+        let playTogetherText = this.add.text(1333, 820, "сыграть\nвместе",
+            { fontFamily: 'sans-serif', fontSize: 50, color: '#000', align: 'center' })
             .setOrigin(0.5);
 
         playTogetherRect.setInteractive();
@@ -208,10 +251,10 @@ class GuessIntervalScene extends Phaser.Scene {
             'text': playTogetherText
         }];
 
-        let playByOneRect = this.add.rectangle(1500, 850, 200, 80, 0x00ee55).
+        let playByOneRect = this.add.rectangle(800, 820, 500, 120, 0x00ee55).
         setOrigin(0.5);
-        let playByOneText = this.add.text(1500, 850, "сыграть\nпо очереди",
-            { fontFamily: 'sans-serif', fontSize: 30, color: '#000', align: 'center' })
+        let playByOneText = this.add.text(800, 820, "сыграть\nпо очереди",
+            { fontFamily: 'sans-serif', fontSize: 50, color: '#000', align: 'center' })
             .setOrigin(0.5);
 
         playByOneRect.setInteractive();
@@ -226,23 +269,37 @@ class GuessIntervalScene extends Phaser.Scene {
         })
     }
 
-    drawSettingsButton() {
-        let settingsRect = this.add.rectangle(1260, 850, 260, 80, 0x00ee55).
+    drawSetIntervalsListButton() {
+        let buttonRect = this.add.rectangle(266, 820, 500, 120, 0x00ee55).
         setOrigin(0.5);
-        let settingsText = this.add.text(1260, 850, "изменить\nнабор интервалов",
-            { fontFamily: 'sans-serif', fontSize: 30, color: '#000', align: 'center' })
+        let buttonText = this.add.text(266, 820, "изменить\nнабор интервалов",
+            { fontFamily: 'sans-serif', fontSize: 45, color: '#000', align: 'center' })
             .setOrigin(0.5);
 
-        settingsRect.setInteractive();
-        settingsRect.on('pointerup', () => {
+        buttonRect.setInteractive();
+        buttonRect.on('pointerup', () => {
             this.changeIntervalsList();
         });
+
+        this.setIntervalsListButton = {
+            'rect': buttonRect,
+            'text': buttonText
+        }
     }
 
     changeIntervalsList() {
+        if (this.isChoosingIntervals)
+            return;
+        this.isChoosingIntervals = true;
         this.piano.clear();
+        this.piano.setVisibility(false);
         this.sound.stopAll();
         this.heading.setText('Выберите интервалы');
+        if (this.setIntervalsListButton) {
+            this.setIntervalsListButton.rect.destroy();
+            this.setIntervalsListButton.text.destroy();
+            this.setIntervalsListButton = null;
+        }
         if (this.buttonNext) {
             this.buttonNext.rect.destroy();
             this.buttonNext.text.destroy();
@@ -302,10 +359,10 @@ class GuessIntervalScene extends Phaser.Scene {
             });
         }
 
-        let startButton = this.add.rectangle(800, 550, 700, 150, 0x00ee55)
+        let startButton = this.add.rectangle(800, 820, 700, 120, 0x00ee55)
             .setOrigin(0.5);
-        let startButtonText = this.add.text(800, 550, 'Начать',
-            { fontFamily: 'sans-serif', fontSize: 60, color: '#000' })
+        let startButtonText = this.add.text(800, 820, 'Начать',
+            { fontFamily: 'sans-serif', fontSize: 70, color: '#000' })
             .setOrigin(0.5);
 
         startButton.setInteractive();
@@ -313,6 +370,8 @@ class GuessIntervalScene extends Phaser.Scene {
             startButton.destroy();
             startButtonText.destroy();
             document.cookie = `intervals_list=${this.intervalsList.flat().toString()}`;
+            this.drawSetIntervalsListButton();
+            this.isChoosingIntervals = false;
             this.guessRandomInterval();
         })
     }
