@@ -1,7 +1,8 @@
 const GAME_SCENES_KEYS = {
     Menu: 'MenuScene',
     GuessInterval: 'GuessIntervalScene',
-    Result: 'ResultScene'
+    Result: 'ResultScene',
+    Instructions: 'InstructionsScene',
 }
 
 const GAME_DATA = {
@@ -20,7 +21,7 @@ const config = {
     scene: [
         MenuScene,
         GuessIntervalScene,
-        ResultScene
+        ResultScene,
     ],
 };
 
