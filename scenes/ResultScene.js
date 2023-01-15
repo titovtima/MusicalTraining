@@ -63,7 +63,7 @@ class ResultScene extends Phaser.Scene {
         rect.on('pointerup', () => {
             let levelsData = this.cache.json.get('levels');
             console.log(levelsData);
-            GAME_DATA.levelInfo = levelsData.levels[GAME_DATA.levelInfo.index + 1];
+            GAME_DATA.levelInfo = levelsData.levels[GAME_DATA.levelInfo.index];
             this.scene.start(GAME_SCENES_KEYS.GuessInterval);
         });
     }

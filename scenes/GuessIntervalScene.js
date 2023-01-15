@@ -39,9 +39,9 @@ class GuessIntervalScene extends Phaser.Scene {
             });
         } else {
             this.intervalsList = GAME_DATA.levelInfo.intervals_list;
+            this.drawMenuButton();
             this.guessRandomInterval();
         }
-
     }
 
     findCookies() {
@@ -434,5 +434,18 @@ class GuessIntervalScene extends Phaser.Scene {
             GAME_DATA.result = this.countResults;
             this.scene.start(GAME_SCENES_KEYS.Result);
         });
+    }
+
+    drawMenuButton() {
+        let rect = this.add.rectangle(100, 70, 160, 100, 0x00ee55)
+            .setOrigin(0.5);
+        this.add.text(100, 70, 'Меню',
+            { fontFamily: 'sans-serif', fontSize: 50, color: '#000' })
+            .setOrigin(0.5);
+
+        rect.setInteractive();
+        rect.on('pointerup', () => {
+            this.scene.start(GAME_SCENES_KEYS.Menu);
+        })
     }
 }

@@ -33,8 +33,8 @@ class MenuScene extends Phaser.Scene {
             { fontFamily: 'sans-serif', fontSize: 80, color: '#000' })
             .setOrigin(0.5);
 
-        this.add.text(800, 120, 'Старая версия игры - уровень 0',
-            { fontFamily: 'sans-serif', fontSize: 40, color: '#000' })
+        this.add.text(800, 120, 'Старая версия игры - свободный уровень (12)',
+            { fontFamily: 'sans-serif', fontSize: 35, color: '#000' })
             .setOrigin(0.5);
     }
 
