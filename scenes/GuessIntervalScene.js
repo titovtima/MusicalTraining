@@ -36,6 +36,7 @@ class GuessIntervalScene extends Phaser.Scene {
             this.drawMenuButton();
         }
 
+        this.drawResultsText();
         this.guessRandomInterval();
     }
 
@@ -157,6 +158,7 @@ class GuessIntervalScene extends Phaser.Scene {
             button.rect.destroy();
             button.text.destroy();
         }
+        this.updateResultsText();
 
         if (levelFinished) {
             this.drawFinishLevelButton();
@@ -429,6 +431,37 @@ class GuessIntervalScene extends Phaser.Scene {
         rect.setInteractive();
         rect.on('pointerup', () => {
             this.scene.start(GAME_SCENES_KEYS.Menu);
-        })
+        });
+    }
+
+    drawResultsText() {
+        let labelsString = 'Отвечено:\nПравильных:';
+        let dataString = '0\n0';
+
+        if (!GAME_DATA.levelInfo.free_level) {
+            labelsString = 'Вопросов на уровне:\n' + labelsString;
+            dataString = GAME_DATA.levelInfo.number_of_tries + '\n' + dataString;
+        }
+
+        this.resultsLabels = this.add.text(1550, 20, labelsString,
+            { fontFamily: 'sans-serif', fontSize: 25, color: '#000', align: 'right' })
+            .setOrigin(1, 0);
+
+        this.resultsText = this.add.text(1580, 20, dataString,
+            { fontFamily: 'sans-serif', fontSize: 25, color: '#000', align: 'right' })
+            .setOrigin(1, 0);
+    }
+
+    updateResultsText() {
+        let dataString = this.countResults.allAnswers + '\n' + this.countResults.rightAnswers;
+        if (!GAME_DATA.levelInfo.free_level) {
+            dataString = GAME_DATA.levelInfo.number_of_tries + '\n' + dataString;
+        }
+
+        this.resultsText.setText(dataString);
+
+        if (this.resultsText.width > 30) {
+            this.resultsLabels.x = 1580 - this.resultsText.width;
+        }
     }
 }
