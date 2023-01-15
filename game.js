@@ -1,7 +1,12 @@
 const GAME_SCENES_KEYS = {
     Menu: 'MenuScene',
-    GuessInterval: 'GuessIntervalScene'
+    GuessInterval: 'GuessIntervalScene',
+    Result: 'ResultScene'
 }
+
+const GAME_DATA = {
+}
+let gameLevelsInfo;
 
 const config = {
     // type: Phaser.AUTO,
@@ -14,7 +19,8 @@ const config = {
     transparent: true,
     scene: [
         MenuScene,
-        GuessIntervalScene
+        GuessIntervalScene,
+        ResultScene
     ],
 };
 

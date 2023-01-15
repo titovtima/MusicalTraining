@@ -7,6 +7,7 @@ class GuessIntervalScene extends Phaser.Scene {
     preload() {
         for (let i = 0; i < 24; i++)
             this.load.audio('note_' + i, 'sounds/' + i + '.mp3');
+        this.load.image('finish_flag', 'assets/finishFlag.png');
     }
 
     create() {
@@ -19,9 +20,21 @@ class GuessIntervalScene extends Phaser.Scene {
 
         this.intervalsList = [[2, 3], [2, 4]];
         this.isChoosingIntervals = false;
+        this.repeatButtons = null;
 
-        this.getIntervalsListFromCookie();
-        this.drawSetIntervalsListButton();
+        this.countResults = {
+            'rightAnswers': 0,
+            'allAnswers': 0
+        };
+
+        if (GAME_DATA.levelInfo.free_level) {
+            this.getIntervalsListFromCookie();
+            this.drawSetIntervalsListButton();
+            this.drawFinishLevelImageButton();
+        } else {
+            this.intervalsList = GAME_DATA.levelInfo.intervals_list;
+        }
+
         this.guessRandomInterval();
     }
 
@@ -127,8 +140,13 @@ class GuessIntervalScene extends Phaser.Scene {
     intervalChosen(intervalName) {
         this.piano.setVisibility(true);
         this.piano.pressKeys([this.interval.lowNote.noteId, this.interval.highNote.noteId]);
+        this.countResults.allAnswers++;
+
+        let levelFinished = !GAME_DATA.levelInfo.free_level &&
+            this.countResults.allAnswers === GAME_DATA.levelInfo.number_of_tries;
         if (intervalName === this.interval.name_ru) {
             this.heading.setText('Правильно!');
+            this.countResults.rightAnswers++;
             this.drawOnlyRightAnswerButton(this.interval.name_ru);
         } else {
             this.heading.setText('Неверно, попробуйте ещё раз!');
@@ -139,6 +157,28 @@ class GuessIntervalScene extends Phaser.Scene {
             button.text.destroy();
         }
 
+        if (levelFinished) {
+            this.drawFinishLevelButton();
+        } else {
+            this.drawNextIntervalButton();
+        }
+    }
+
+    drawFinishLevelButton() {
+        let finishButton = this.add.rectangle(800, 400, 700, 150, 0x00ee55)
+            .setOrigin(0.5);
+        this.add.text(800, 400, 'Закончить уровень',
+            { fontFamily: 'sans-serif', fontSize: 60, color: '#000' })
+            .setOrigin(0.5);
+
+        finishButton.setInteractive();
+        finishButton.on('pointerup', () => {
+            GAME_DATA.result = this.countResults;
+            this.scene.start(GAME_SCENES_KEYS.Result);
+        });
+    }
+
+    drawNextIntervalButton() {
         if (this.buttonNext) {
             this.buttonNext.rect.destroy();
             this.buttonNext.text.destroy();
@@ -359,6 +399,22 @@ class GuessIntervalScene extends Phaser.Scene {
                 this.isChoosingIntervals = false;
                 this.guessRandomInterval();
             }
+        });
+    }
+
+    drawFinishLevelImageButton() {
+        // let rect = this.add.rectangle(170, 80, 300, 120, 0x00ee55)
+        //     .setOrigin(0.5);
+        // this.add.text(170, 80, 'Завершить',
+        //     { fontFamily: 'sans-serif', fontSize: 50, color: '#000' })
+        //     .setOrigin(0.5);
+
+        let img = this.add.image(0, 0, 'finish_flag')
+            .setOrigin(0).setScale(150/500);
+        img.setInteractive();
+        img.on('pointerup', () => {
+            GAME_DATA.result = this.countResults;
+            this.scene.start(GAME_SCENES_KEYS.Result);
         });
     }
 }

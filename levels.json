@@ -1,0 +1,87 @@
+{
+  "levels": [
+    {
+      "index": 0,
+      "name_ru": "свободный",
+      "free_level": true
+    },
+    {
+      "index": 1,
+      "name_ru": "две терции",
+      "intervals_list": [[2, 3], [2, 4]],
+      "number_of_tries": 10,
+      "need_to_pass_level": 8
+    },
+    {
+      "index": 2,
+      "name_ru": "кварта",
+      "intervals_list": [[2, 3], [2, 4], [3, 5]],
+      "number_of_tries": 15,
+      "need_to_pass_level": 11
+    },
+    {
+      "index": 3,
+      "name_ru": "квинта",
+      "intervals_list": [[2, 3], [2, 4], [3, 5], [4, 7]],
+      "number_of_tries": 15,
+      "need_to_pass_level": 11
+    },
+    {
+      "index": 4,
+      "name_ru": "секунда",
+      "intervals_list": [[1, 1], [1, 2]],
+      "number_of_tries": 10,
+      "need_to_pass_level": 8
+    },
+    {
+      "index": 5,
+      "name_ru": "повторение",
+      "intervals_list": [[1, 1], [1, 2], [2, 3], [2, 4], [3, 5], [4, 7]],
+      "number_of_tries": 20,
+      "need_to_pass_level": 15
+    },
+    {
+      "index": 6,
+      "name_ru": "секста",
+      "intervals_list": [[5, 8], [5, 9]],
+      "number_of_tries": 10,
+      "need_to_pass_level": 8
+    },
+    {
+      "index": 7,
+      "name_ru": "септима",
+      "intervals_list": [[5, 8], [5, 9], [6, 10], [6, 11]],
+      "number_of_tries": 15,
+      "need_to_pass_level": 11
+    },
+    {
+      "index": 8,
+      "name_ru": "закрепление",
+      "intervals_list": [[1, 1], [1, 2], [2, 3], [2, 4], [3, 5], [4, 7], [5, 8], [5, 9], [6, 10], [6, 11]],
+      "number_of_tries": 20,
+      "need_to_pass_level": 15
+    },
+    {
+      "index": 9,
+      "name_ru": "октава",
+      "intervals_list": [[2, 4], [3, 5], [4, 7], [7, 12]],
+      "number_of_tries": 15,
+      "need_to_pass_level": 11
+    },
+    {
+      "index": 10,
+      "name_ru": "тритон",
+      "intervals_list": [[1, 1], [1, 2], [3, 6], [6, 10], [6, 11]],
+      "number_of_tries": 15,
+      "need_to_pass_level": 11
+    },
+    {
+      "index": 11,
+      "name_ru": "итог",
+      "intervals_list": [[1, 1], [1, 2], [2, 3], [2, 4], [3, 5], [3, 6],
+        [4, 7], [5, 8], [5, 9], [6, 10], [6, 11], [7, 12]],
+      "number_of_tries": 25,
+      "need_to_pass_level": 20
+    }
+  ]
+}
