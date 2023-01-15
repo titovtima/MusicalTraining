@@ -29,14 +29,19 @@ class GuessIntervalScene extends Phaser.Scene {
 
         if (GAME_DATA.levelInfo.free_level) {
             // this.getIntervalsListFromCookie();
-            playerLoadingPromise.then(() => this.getIntervalsListFromPlayerData());
-            this.drawSetIntervalsListButton();
-            this.drawFinishLevelImageButton();
+            playerLoadingPromise.then(() => {
+                this.getIntervalsListFromPlayerData()
+                    .then(() => {
+                        this.drawSetIntervalsListButton();
+                        this.drawFinishLevelImageButton();
+                        this.guessRandomInterval();
+                    });
+            });
         } else {
             this.intervalsList = GAME_DATA.levelInfo.intervals_list;
+            this.guessRandomInterval();
         }
 
-        this.guessRandomInterval();
     }
 
     findCookies() {
@@ -60,8 +65,8 @@ class GuessIntervalScene extends Phaser.Scene {
         }
     }
 
-    getIntervalsListFromPlayerData() {
-        player.getData().then(data => {
+    async getIntervalsListFromPlayerData() {
+        await player.getData().then(data => {
             console.log('player data', data);
             if (data.intervals_list) {
                 this.intervalsList = data.intervals_list;
