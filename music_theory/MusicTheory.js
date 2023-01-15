@@ -571,6 +571,38 @@ var MusicTheory = function (_, Kotlin) {
     Interval$Companion_instance = this;
     this.possibleIntervals = new BiMap(mapOf([to(to(0, 0), '\u043F\u0440\u0438\u043C\u0430'), to(to(1, 1), '\u043C\u0430\u043B\u0430\u044F \u0441\u0435\u043A\u0443\u043D\u0434\u0430'), to(to(1, 2), '\u0431\u043E\u043B\u044C\u0448\u0430\u044F \u0441\u0435\u043A\u0443\u043D\u0434\u0430'), to(to(1, 3), '\u0443\u0432\u0435\u043B\u0438\u0447\u0435\u043D\u043D\u0430\u044F \u0441\u0435\u043A\u0443\u043D\u0434\u0430'), to(to(2, 3), '\u043C\u0430\u043B\u0430\u044F \u0442\u0435\u0440\u0446\u0438\u044F'), to(to(2, 4), '\u0431\u043E\u043B\u044C\u0448\u0430\u044F \u0442\u0435\u0440\u0446\u0438\u044F'), to(to(3, 4), '\u0443\u043C\u0435\u043D\u044C\u0448\u0435\u043D\u043D\u0430\u044F \u043A\u0432\u0430\u0440\u0442\u0430'), to(to(3, 5), '\u0447\u0438\u0441\u0442\u0430\u044F \u043A\u0432\u0430\u0440\u0442\u0430'), to(to(3, 6), '\u0443\u0432\u0435\u043B\u0438\u0447\u0435\u043D\u043D\u0430\u044F \u043A\u0432\u0430\u0440\u0442\u0430'), to(to(4, 6), '\u0443\u043C\u0435\u043D\u044C\u0448\u0435\u043D\u043D\u0430\u044F \u043A\u0432\u0438\u043D\u0442\u0430'), to(to(4, 7), '\u0447\u0438\u0441\u0442\u0430\u044F \u043A\u0432\u0438\u043D\u0442\u0430'), to(to(4, 8), '\u0443\u0432\u0435\u043B\u0438\u0447\u0435\u043D\u043D\u0430\u044F \u043A\u0432\u0438\u043D\u0442\u0430'), to(to(5, 8), '\u043C\u0430\u043B\u0430\u044F \u0441\u0435\u043A\u0441\u0442\u0430'), to(to(5, 9), '\u0431\u043E\u043B\u044C\u0448\u0430\u044F \u0441\u0435\u043A\u0441\u0442\u0430'), to(to(6, 9), '\u0443\u043C\u0435\u043D\u044C\u0448\u0435\u043D\u043D\u0430\u044F \u0441\u0435\u043F\u0442\u0438\u043C\u0430'), to(to(6, 10), '\u043C\u0430\u043B\u0430\u044F \u0441\u0435\u043F\u0442\u0438\u043C\u0430'), to(to(6, 11), '\u0431\u043E\u043B\u044C\u0448\u0430\u044F \u0441\u0435\u043F\u0442\u0438\u043C\u0430'), to(to(7, 12), '\u043E\u043A\u0442\u0430\u0432\u0430')]));
   }
+  Interval$Companion.prototype.distanceToIntervalName_za3lpa$ = function (distance) {
+    switch (distance) {
+      case 0:
+        return '\u043F\u0440\u0438\u043C\u0430';
+      case 1:
+        return '\u043C\u0430\u043B\u0430\u044F \u0441\u0435\u043A\u0443\u043D\u0434\u0430';
+      case 2:
+        return '\u0431\u043E\u043B\u044C\u0448\u0430\u044F \u0441\u0435\u043A\u0443\u043D\u0434\u0430';
+      case 3:
+        return '\u043C\u0430\u043B\u0430\u044F \u0442\u0435\u0440\u0446\u0438\u044F';
+      case 4:
+        return '\u0431\u043E\u043B\u044C\u0448\u0430\u044F \u0442\u0435\u0440\u0446\u0438\u044F';
+      case 5:
+        return '\u0447\u0438\u0441\u0442\u0430\u044F \u043A\u0432\u0430\u0440\u0442\u0430';
+      case 6:
+        return '\u0442\u0440\u0438\u0442\u043E\u043D';
+      case 7:
+        return '\u0447\u0438\u0441\u0442\u0430\u044F \u043A\u0432\u0438\u043D\u0442\u0430';
+      case 8:
+        return '\u043C\u0430\u043B\u0430\u044F \u0441\u0435\u043A\u0441\u0442\u0430';
+      case 9:
+        return '\u0431\u043E\u043B\u044C\u0448\u0430\u044F \u0441\u0435\u043A\u0441\u0442\u0430';
+      case 10:
+        return '\u043C\u0430\u043B\u0430\u044F \u0441\u0435\u043F\u0442\u0438\u043C\u0430';
+      case 11:
+        return '\u0431\u043E\u043B\u044C\u0448\u0430\u044F \u0441\u0435\u043F\u0442\u0438\u043C\u0430';
+      case 12:
+        return '\u043E\u043A\u0442\u0430\u0432\u0430';
+      default:
+        throw new IntervalException(void 0, void 0, 'Interval is too wide, distance = ' + distance);
+    }
+  };
   Interval$Companion.prototype.makeIntervalWithSwapNotesIfNeeded_byhmno$ = function (firstNote, secondNote) {
     return firstNote.natural > secondNote.natural ? new Interval(secondNote, firstNote) : new Interval(firstNote, secondNote);
   };
@@ -774,8 +806,8 @@ var MusicTheory = function (_, Kotlin) {
     Note$Companion_instance = this;
     this.sharp = toBoxedChar(9839);
     this.flat = toBoxedChar(9837);
-    this.doubleSharp = '\uD834\uDD2A';
-    this.doubleFlat = '\uD834\uDD2B';
+    this.doubleSharp = '\uE002';
+    this.doubleFlat = '\uE001';
     this.naturalToId = new BiMap(mapOf([to(0, 0), to(1, 2), to(2, 4), to(3, 5), to(4, 7), to(5, 9), to(6, 11)]));
   }
   Note$Companion.prototype.naturalToName_548ocs$ = function (notationSystem) {
@@ -1101,8 +1133,8 @@ var MusicTheory = function (_, Kotlin) {
   function chordsTextToString_JS(chordsText) {
     return chordsText.toString();
   }
-  function getIntervalNameByDifferenceNumbers_JS(naturalsDiff, noteIdsDiff) {
-    return Interval$Companion_getInstance().possibleIntervals.get_11rb$(to(naturalsDiff, noteIdsDiff));
+  function getIntervalNameByNotesIdsDifference_JS(noteIdsDiff) {
+    return Interval$Companion_getInstance().distanceToIntervalName_za3lpa$(noteIdsDiff);
   }
   function getDifferenceNumbersByIntervalName_JS(intervalName) {
     var pair = Interval$Companion_getInstance().possibleIntervals.reverse.get_11rb$(intervalName);
@@ -1187,7 +1219,7 @@ var MusicTheory = function (_, Kotlin) {
   _.chordName = chordName_JS;
   _.keyName = keyName_JS;
   _.chordsTextToString = chordsTextToString_JS;
-  _.getIntervalNameByDifferenceNumbers = getIntervalNameByDifferenceNumbers_JS;
+  _.getIntervalNameByNotesIdsDifference = getIntervalNameByNotesIdsDifference_JS;
   _.getDifferenceNumbersByIntervalName = getDifferenceNumbersByIntervalName_JS;
   _.createNoteWithOctave = createNoteWithOctave_JS;
   _.createIntervalByNoteAndDiffs = createIntervalByNoteAndDiffs_JS;
