@@ -29,13 +29,13 @@ class MenuScene extends Phaser.Scene {
     }
 
     drawTitle() {
-        this.add.text(800, 50, 'Выберите уровень',
-            { fontFamily: 'sans-serif', fontSize: 80, color: '#000' })
+        this.add.text(800, 75, 'Выберите уровень',
+            { fontFamily: 'sans-serif', fontSize: 100, color: '#000' })
             .setOrigin(0.5);
 
-        this.add.text(800, 120, 'Старая версия игры - свободный уровень (12)',
-            { fontFamily: 'sans-serif', fontSize: 35, color: '#000' })
-            .setOrigin(0.5);
+        // this.add.text(800, 120, 'Старая версия игры - свободный уровень (12)',
+        //     { fontFamily: 'sans-serif', fontSize: 35, color: '#000' })
+        //     .setOrigin(0.5);
     }
 
     drawLevelButtons() {
