@@ -143,6 +143,9 @@ class GuessIntervalScene extends Phaser.Scene {
         this.piano.setVisibility(true);
         this.piano.pressKeys([this.interval.lowNote.noteId, this.interval.highNote.noteId]);
         this.countResults.allAnswers++;
+        if (this.countResults === 5)
+            ym(91864844,'reachGoal','5_answers_on_free_level');
+
 
         let levelFinished = !GAME_DATA.levelInfo.free_level &&
             this.countResults.allAnswers === GAME_DATA.levelInfo.number_of_tries;
@@ -176,8 +179,7 @@ class GuessIntervalScene extends Phaser.Scene {
 
         finishButton.setInteractive();
         finishButton.on('pointerup', () => {
-            GAME_DATA.result = this.countResults;
-            this.scene.start(GAME_SCENES_KEYS.Result);
+            this.finishLevel();
         });
     }
 
@@ -296,7 +298,7 @@ class GuessIntervalScene extends Phaser.Scene {
     drawSetIntervalsListButton() {
         let buttonRect = this.add.rectangle(266, 820, 500, 120, 0x00ee55).
         setOrigin(0.5);
-        let buttonText = this.add.text(266, 820, "изменить\nнабор интервалов",
+        let buttonText = this.add.text(266, 820, "изменить набор\n(прогресс сбросится)",
             { fontFamily: 'sans-serif', fontSize: 45, color: '#000', align: 'center' })
             .setOrigin(0.5);
 
@@ -319,6 +321,9 @@ class GuessIntervalScene extends Phaser.Scene {
         this.piano.setVisibility(false);
         this.sound.stopAll();
         this.heading.setText('Выберите интервалы');
+        this.countResults.allAnswers = 0;
+        this.countResults.rightAnswers = 0;
+        this.updateResultsText();
         if (this.setIntervalsListButton) {
             this.setIntervalsListButton.rect.destroy();
             this.setIntervalsListButton.text.destroy();
@@ -416,8 +421,7 @@ class GuessIntervalScene extends Phaser.Scene {
             .setOrigin(0).setScale(150/500);
         img.setInteractive();
         img.on('pointerup', () => {
-            GAME_DATA.result = this.countResults;
-            this.scene.start(GAME_SCENES_KEYS.Result);
+            this.finishLevel();
         });
     }
 
@@ -463,5 +467,13 @@ class GuessIntervalScene extends Phaser.Scene {
         if (this.resultsText.width > 30) {
             this.resultsLabels.x = 1580 - this.resultsText.width;
         }
+    }
+
+    finishLevel() {
+        if (GAME_DATA.levelInfo.index < 12)
+            ym(91864844,'reachGoal','finish_level');
+        GAME_DATA.result = this.countResults;
+        GAME_DATA.intervalsList = this.intervalsList;
+        this.scene.start(GAME_SCENES_KEYS.Result);
     }
 }

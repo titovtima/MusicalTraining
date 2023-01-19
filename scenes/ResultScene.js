@@ -7,8 +7,16 @@ class ResultScene extends Phaser.Scene {
         this.passLevel = !GAME_DATA.levelInfo.free_level &&
             GAME_DATA.result.rightAnswers >= GAME_DATA.levelInfo.need_to_pass_level;
 
+        if (this.passLevel) {
+            ym(91864844,'reachGoal','win_level');
+        }
+
+        let jsonString = `{ "score_level_${GAME_DATA.levelInfo.index}": ${GAME_DATA.result.rightAnswers} }`;
+        ym(91864844, 'params', JSON.parse(jsonString));
+
         this.drawLevelName();
         this.drawResult();
+        this.drawIntervalsList();
         this.drawRepeatButton();
         if (this.passLevel && GAME_DATA.levelInfo.index < 11)
             this.drawNextLevelButton();
@@ -35,8 +43,8 @@ class ResultScene extends Phaser.Scene {
         }
 
         this.add.text(800, 450, resultString,
-            { fontFamily: 'sans-serif', fontSize: 80, color: '#000', align: 'center' })
-            .setOrigin(0.5);
+            { fontFamily: 'sans-serif', fontSize: 70, color: '#000', align: 'center' })
+            .setOrigin(0.5, 1);
     }
 
     drawRepeatButton() {
@@ -68,6 +76,22 @@ class ResultScene extends Phaser.Scene {
         });
     }
 
+    drawIntervalsList() {
+        let label = this.add.text(800, 500, 'Набор интервалов:',
+            { fontFamily: 'sans-serif', fontSize: 60, color: '#000' })
+            .setOrigin(0.5, 0);
+        let string = '';
+        for (let interval of GAME_DATA.intervalsList) {
+            string += ', ' + MusicTheory.getIntervalNameByNotesIdsDifference(interval[1]);
+        }
+
+        string = string.substring(2);
+
+        this.add.text(800, 500 + label.height, string,
+            { fontFamily: 'sans-serif', fontSize: 40, color: '#000' , wordWrap: { width: 1500 }, align: 'center' })
+            .setOrigin(0.5, 0);
+    }
+
     drawMenuButton() {
         let rect = this.add.rectangle(1425, 100, 300, 150, 0x00ee55)
             .setOrigin(0.5);
@@ -78,6 +102,6 @@ class ResultScene extends Phaser.Scene {
         rect.setInteractive();
         rect.on('pointerup', () => {
             this.scene.start(GAME_SCENES_KEYS.Menu);
-        })
+        });
     }
 }
