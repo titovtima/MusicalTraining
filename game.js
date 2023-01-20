@@ -8,6 +8,7 @@ const GAME_SCENES_KEYS = {
 const GAME_DATA = {
 }
 let gameLevelsInfo;
+const RESOURCES_PATH = 'assets/';
 
 const config = {
     // type: Phaser.AUTO,
@@ -20,6 +21,7 @@ const config = {
     transparent: true,
     scene: [
         MenuScene,
+        InstructionsScene,
         GuessIntervalScene,
         ResultScene,
     ],

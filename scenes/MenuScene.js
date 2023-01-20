@@ -6,19 +6,39 @@ class MenuScene extends Phaser.Scene {
 
     preload() {
         this.load.json('levels', 'levels.json');
-        this.load.image('levelCardBackground', 'assets/rec800-500.png');
+        this.load.image('levelCardBackground', RESOURCES_PATH + 'rec800-500.png');
+        this.load.image('info', RESOURCES_PATH + 'info.png');
+        this.load.image('info_over', RESOURCES_PATH + 'info_over.png');
     }
 
     create() {
-        // this.drawStartButton();
         this.drawTitle();
-        this.drawLevelButtons()
+        this.drawInstructionsButton();
+        this.drawLevelButtons();
     }
 
     drawTitle() {
         this.add.text(800, 75, 'Выберите уровень',
             { fontFamily: 'sans-serif', fontSize: 100, color: '#000' })
             .setOrigin(0.5);
+    }
+
+    drawInstructionsButton() {
+        let instructionsButton = this.add.image(1580, 20, 'info')
+            .setOrigin(1, 0)
+            .setScale(100/1700);
+
+        instructionsButton.setInteractive();
+        instructionsButton.on('pointerup', () => {
+            this.scene.start(GAME_SCENES_KEYS.Instructions);
+        });
+
+        instructionsButton.on('pointerover', () => {
+            instructionsButton.setTexture('info_over');
+        });
+        instructionsButton.on('pointerout', () => {
+            instructionsButton.setTexture('info');
+        });
     }
 
     drawLevelButtons() {
