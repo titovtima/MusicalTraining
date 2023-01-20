@@ -6,8 +6,8 @@ class GuessIntervalScene extends Phaser.Scene {
 
     preload() {
         for (let i = 0; i < 24; i++)
-            this.load.audio('note_' + i, 'sounds/' + i + '.mp3');
-        this.load.image('finish_flag', 'assets/finishFlag.png');
+            this.load.audio('note_' + i, RESOURCES_PATH + 'sounds/' + i + '.mp3');
+        this.load.image('finish_flag', RESOURCES_PATH + 'finishFlag.png');
     }
 
     create() {
