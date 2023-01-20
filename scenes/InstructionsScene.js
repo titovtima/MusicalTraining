@@ -44,7 +44,8 @@ class InstructionsScene extends Phaser.Scene {
         let block2 = this.add.image(800, 300, 'semitones')
             .setOrigin(0.5, 0)
             .setScale(222/181);
-        let text3 = 'В игре предлагается угадать по звучанию,\nкакое расстояние в тонах между звучащими нотами.\n' +
+        let text3 = 'В игре предлагается по звучанию догадаться,\n' +
+            'какое расстояние в тонах между звучащими нотами.\n' +
             'Соответствие названий интервалов расстоянию в тонах:';
         let block3 = this.add.text(800, 525, text3,
             { fontFamily: 'sans-serif', fontSize: 35, color: '#000',
