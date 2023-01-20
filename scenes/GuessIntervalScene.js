@@ -6,8 +6,8 @@ class GuessIntervalScene extends Phaser.Scene {
 
     preload() {
         for (let i = 0; i < 24; i++)
-            this.load.audio('note_' + i, 'sounds/' + i + '.mp3');
-        this.load.image('finish_flag', 'assets/finishFlag.png');
+            this.load.audio('note_' + i, RESOURCES_PATH + 'sounds/' + i + '.mp3');
+        this.load.image('finish_flag', RESOURCES_PATH + 'finishFlag.png');
     }
 
     create() {
@@ -158,6 +158,9 @@ class GuessIntervalScene extends Phaser.Scene {
         this.piano.setVisibility(true);
         this.piano.pressKeys([this.interval.lowNote.noteId, this.interval.highNote.noteId]);
         this.countResults.allAnswers++;
+        if (this.countResults === 5)
+            ym(91864844,'reachGoal','5_answers_on_free_level');
+
 
         let levelFinished = !GAME_DATA.levelInfo.free_level &&
             this.countResults.allAnswers === GAME_DATA.levelInfo.number_of_tries;
@@ -485,6 +488,8 @@ class GuessIntervalScene extends Phaser.Scene {
     }
 
     finishLevel() {
+        if (GAME_DATA.levelInfo.index < 12)
+            ym(91864844,'reachGoal','finish_level');
         GAME_DATA.result = this.countResults;
         GAME_DATA.intervalsList = this.intervalsList;
         this.scene.start(GAME_SCENES_KEYS.Result);

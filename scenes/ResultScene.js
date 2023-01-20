@@ -7,6 +7,13 @@ class ResultScene extends Phaser.Scene {
         this.passLevel = !GAME_DATA.levelInfo.free_level &&
             GAME_DATA.result.rightAnswers >= GAME_DATA.levelInfo.need_to_pass_level;
 
+        if (this.passLevel) {
+            ym(91864844,'reachGoal','win_level');
+        }
+
+        let jsonString = `{ "score_level_${GAME_DATA.levelInfo.index}": ${GAME_DATA.result.rightAnswers} }`;
+        ym(91864844, 'params', JSON.parse(jsonString));
+
         this.drawLevelName();
         this.drawResult();
         this.drawIntervalsList();
