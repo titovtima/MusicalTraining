@@ -21,11 +21,12 @@ class ResultScene extends Phaser.Scene {
         if (this.passLevel && GAME_DATA.levelInfo.index < 11)
             this.drawNextLevelButton();
         this.drawMenuButton();
+        this.updatePlayerData();
     }
 
     drawLevelName() {
         let string = GAME_DATA.levelInfo.index + ' - ' + GAME_DATA.levelInfo.name_ru;
-        this.add.text(800, 100, string,
+        this.add.text(800, 75, string,
             { fontFamily: 'sans-serif', fontSize: 100, color: '#000' })
             .setOrigin(0.5);
     }
@@ -42,9 +43,9 @@ class ResultScene extends Phaser.Scene {
             }
         }
 
-        this.add.text(800, 450, resultString,
+        this.resultText = this.add.text(800, 200, resultString,
             { fontFamily: 'sans-serif', fontSize: 70, color: '#000', align: 'center' })
-            .setOrigin(0.5, 1);
+            .setOrigin(0.5, 0);
     }
 
     drawRepeatButton() {
@@ -103,5 +104,22 @@ class ResultScene extends Phaser.Scene {
         rect.on('pointerup', () => {
             this.scene.start(GAME_SCENES_KEYS.Menu);
         });
+    }
+
+    async updatePlayerData() {
+        // console.log('loading player data');
+        let data = await player.getData();
+        if (!data.levels_max_scores)
+            data.levels_max_scores = {};
+        if (!data.levels_max_scores.guess_interval)
+            data.levels_max_scores.guess_interval = {}
+        if (!data.levels_max_scores.guess_interval[GAME_DATA.levelInfo.index])
+            data.levels_max_scores.guess_interval[GAME_DATA.levelInfo.index] = 0;
+        let prevMax = data.levels_max_scores.guess_interval[GAME_DATA.levelInfo.index]
+        if (GAME_DATA.result.rightAnswers > prevMax) {
+            this.resultText.setText(this.resultText.text + '\nУ Вас новый рекорд!');
+            data.levels_max_scores.guess_interval[GAME_DATA.levelInfo.index] = GAME_DATA.result.rightAnswers;
+            player.setData(data);
+        }
     }
 }

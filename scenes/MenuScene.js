@@ -12,6 +12,7 @@ class MenuScene extends Phaser.Scene {
     }
 
     create() {
+        this.loadPlayerDataPromise = playerLoadingPromise.then(() => player.getData());
         this.drawTitle();
         this.drawInstructionsButton();
         this.drawLevelButtons();
@@ -49,16 +50,17 @@ class MenuScene extends Phaser.Scene {
         let buttonX = buttonWidth / 2;
         let buttonY = 150 + buttonHeight / 2 ;
 
-        gameLevelsInfo = this.cache.json.get('levels');
-        for (let level of gameLevelsInfo.levels) {
+        this.gameLevelsInfo = this.cache.json.get('levels');
+        for (let level of this.gameLevelsInfo.levels) {
             let background = this.add.image(buttonX, buttonY, 'levelCardBackground')
                 .setScale(imgScale).setOrigin(0.5);
             let number = this.add.text(buttonX, buttonY - 50, level.index,
                 { fontFamily: 'sans-serif', fontSize: 80, color: '#000' })
                 .setOrigin(0.5);
-            let text = this.add.text(buttonX, buttonY + 50, level.name_ru,
+            let text = this.add.text(buttonX, buttonY + 10, level.name_ru,
                 { fontFamily: 'sans-serif', fontSize: 50, color: '#000' })
                 .setOrigin(0.5);
+            this.addMaxScoreText(buttonX, buttonY + 70, level.index);
 
             background.setInteractive();
             background.on('pointerup', () => {
@@ -78,5 +80,20 @@ class MenuScene extends Phaser.Scene {
                 buttonY += buttonHeight;
             }
         }
+    }
+
+    addMaxScoreText(x, y, levelIndex) {
+        this.loadPlayerDataPromise.then(playerData => {
+            let maxResult = 0;
+            if (playerData && playerData.levels_max_scores && playerData.levels_max_scores.guess_interval
+                && playerData.levels_max_scores.guess_interval[levelIndex])
+                maxResult = playerData.levels_max_scores.guess_interval[levelIndex];
+            let allQuestions = this.gameLevelsInfo.levels[levelIndex - 1].number_of_tries;
+            let string = 'Ваш рекорд: ' + maxResult;
+            if (allQuestions)
+                string += ' из ' + allQuestions;
+            this.add.text(x, y, string, {fontFamily: 'sans-serif', fontSize: 35, color: '#000'})
+                .setOrigin(0.5, 0.5);
+        });
     }
 }
