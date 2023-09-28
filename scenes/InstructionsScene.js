@@ -22,17 +22,17 @@ class InstructionsScene extends Phaser.Scene {
 
         rect.setInteractive();
         rect.on('pointerup', () => {
-            this.scene.start(GAME_SCENES_KEYS.Menu);
+            this.scene.start(GAME_SCENES_KEYS.LevelMenu);
         });
     }
 
     drawInstructions() {
-        if (this.page === 0) {
-            this.drawFirstPage();
+        if (GAME_DATA.game.tag === "guessInterval") {
+            this.drawGuessIntervalInstructions();
         }
     }
 
-    drawFirstPage() {
+    drawGuessIntervalInstructions() {
         let text1 = 'Интервал в музыке - сочетание двух нот. Название интервала показывает расстояние между нотами. ' +
             'Расстояния в музыке измеряются в тонах. Один лад на гитаре - полтона. ' +
             'Между любыми двумя соседними клавишами на пианино (между которыми нет другой клавиши) - полтона. ' +
@@ -71,6 +71,5 @@ class InstructionsScene extends Phaser.Scene {
             { fontFamily: 'sans-serif', fontSize: 35, color: '#000',
                 align: 'center', wordWrap: { width: 1500 } })
             .setOrigin(0.5, 0);
-        this.displayBlocks = [block1, block2, block3, block4, block5];
     }
 }

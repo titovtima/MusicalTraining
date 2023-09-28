@@ -1,0 +1,9 @@
+{
+  "games": [
+    {
+      "tag": "guessInterval",
+      "levelsFile": "guessIntervalLevels.json",
+      "name_ru": "Интервалы\nвне тональности"
+    }
+  ]
+}
