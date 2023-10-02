@@ -452,7 +452,7 @@ class GuessIntervalScene extends Phaser.Scene {
 
         rect.setInteractive();
         rect.on('pointerup', () => {
-            this.scene.start(GAME_SCENES_KEYS.Menu);
+            this.scene.start(GAME_SCENES_KEYS.LevelMenu);
         });
     }
 

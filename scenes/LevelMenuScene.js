@@ -1,12 +1,12 @@
-class MenuScene extends Phaser.Scene {
+class LevelMenuScene extends Phaser.Scene {
 
     constructor() {
-        super(GAME_SCENES_KEYS.Menu);
+        super(GAME_SCENES_KEYS.LevelMenu);
     }
 
     preload() {
-        this.load.json('levels', 'levels.json');
-        this.load.image('levelCardBackground', RESOURCES_PATH + 'rec800-500.png');
+        this.load.json(GAME_DATA.game.tag + 'Levels', 'jsonConfig/' + GAME_DATA.game.levelsFile);
+        this.load.image('menuCardBackground', RESOURCES_PATH + 'rec800-500.png');
         this.load.image('info', RESOURCES_PATH + 'info.png');
         this.load.image('info_over', RESOURCES_PATH + 'info_over.png');
     }
@@ -14,6 +14,7 @@ class MenuScene extends Phaser.Scene {
     create() {
         this.loadPlayerDataPromise = playerLoadingPromise.then(() => player.getData());
         this.drawTitle();
+        this.drawHomeButton();
         this.drawInstructionsButton();
         this.drawLevelButtons();
     }
@@ -42,6 +43,19 @@ class MenuScene extends Phaser.Scene {
         });
     }
 
+    drawHomeButton() {
+        let rect = this.add.rectangle(100, 70, 160, 100, 0x00ddff)
+            .setOrigin(0.5);
+        this.add.text(100, 70, 'Игры',
+            { fontFamily: 'sans-serif', fontSize: 50, color: '#000' })
+            .setOrigin(0.5);
+
+        rect.setInteractive();
+        rect.on('pointerup', () => {
+            this.scene.start(GAME_SCENES_KEYS.GameMenu);
+        });
+    }
+
     drawLevelButtons() {
         let buttonWidth = 1600 / 4;
         let buttonHeight = 250;
@@ -50,9 +64,9 @@ class MenuScene extends Phaser.Scene {
         let buttonX = buttonWidth / 2;
         let buttonY = 150 + buttonHeight / 2 ;
 
-        this.gameLevelsInfo = this.cache.json.get('levels');
-        for (let level of this.gameLevelsInfo.levels) {
-            let background = this.add.image(buttonX, buttonY, 'levelCardBackground')
+        let gameLevelsInfo = this.cache.json.get(GAME_DATA.game.tag + 'Levels');
+        for (let level of gameLevelsInfo.levels) {
+            let background = this.add.image(buttonX, buttonY, 'menuCardBackground')
                 .setScale(imgScale).setOrigin(0.5);
             let number = this.add.text(buttonX, buttonY - 50, level.index,
                 { fontFamily: 'sans-serif', fontSize: 80, color: '#000' })

@@ -1,5 +1,6 @@
 const GAME_SCENES_KEYS = {
-    Menu: 'MenuScene',
+    GameMenu: 'GameMenuScene',
+    LevelMenu: 'LevelMenuScene',
     GuessInterval: 'GuessIntervalScene',
     Result: 'ResultScene',
     Instructions: 'InstructionsScene',
@@ -7,7 +8,6 @@ const GAME_SCENES_KEYS = {
 
 const GAME_DATA = {
 }
-let gameLevelsInfo;
 const RESOURCES_PATH = 'assets/';
 
 const config = {
@@ -20,7 +20,8 @@ const config = {
     },
     transparent: true,
     scene: [
-        MenuScene,
+        GameMenuScene,
+        LevelMenuScene,
         InstructionsScene,
         GuessIntervalScene,
         ResultScene,
